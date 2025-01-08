@@ -25,6 +25,6 @@ with st.columns(5)[2]:
         
 if is_spam:
     st.error("The sms is a spam")
-else:
+elif sms:
     st.success("The sms is not a spam")
 
