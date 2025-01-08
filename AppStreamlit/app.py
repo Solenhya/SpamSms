@@ -11,16 +11,11 @@ def TestPhraseList(phraseList,spamProba=1):
             spamProba*=vraisemblance
     return(spamProba)
 
-def TestPhrase(phrase:str,spamProba=1):
-    phraseList=phrase.split()
-    return TestPhraseList(phraseList,spamProba=spamProba)
-
 def detect_spam(sms):
     if sms == "":
         return False
     else:
-        # Todo: Implement spam detection logic
-        return TestPhrase(sms) > 1
+        return TestPhraseList(sms.split()) > 1
 is_spam = False
 
 st.set_page_config(
