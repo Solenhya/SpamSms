@@ -1,24 +1,26 @@
 import streamlit as st
 import pandas as pd
+import joblib
 
-# def TestPhraseList(phraseList,spamProba=1):
-#     for word in phraseList:
-#         vraisemblance = total["vraisemblance"].get(word,"NotFound")
-#         if vraisemblance!="NotFound":
-#             spamProba*=vraisemblance
-#     return(spamProba)
+loaded_df, spamProbality = joblib.load('./BayesienModel.joblib')
 
-# def TestPhrase(phrase:str,spamProba=1):
-#     phraseList=phrase.split()
-#     return TestPhraseList(phraseList,spamProba=spamProba)
+def TestPhraseList(phraseList,spamProba=1):
+    for word in phraseList:
+        vraisemblance = loaded_df["vraisemblance"].get(word,"NotFound")
+        if vraisemblance!="NotFound":
+            spamProba*=vraisemblance
+    return(spamProba)
+
+def TestPhrase(phrase:str,spamProba=1):
+    phraseList=phrase.split()
+    return TestPhraseList(phraseList,spamProba=spamProba)
 
 def detect_spam(sms):
     if sms == "":
         return False
     else:
         # Todo: Implement spam detection logic
-        # TestPhrase(sms)
-        return True
+        return TestPhrase(sms) > 1
 is_spam = False
 
 st.set_page_config(
