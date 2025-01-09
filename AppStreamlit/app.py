@@ -15,7 +15,8 @@ def detect_spam(sms):
     if sms == "":
         return False
     else:
-        return TestPhraseList(sms.split()) > 1
+        spamProbality = TestPhraseList(sms.split())
+        return spamProbality
 is_spam = False
 
 st.set_page_config(
@@ -30,10 +31,11 @@ st.header("To detect if the sms is a spam")
 sms = st.text_area("Enter the sms here", key="sms", height=150)
 with st.columns(5)[2]:
     if st.button("Detect", use_container_width=True):
-        is_spam = detect_spam(sms)
+        spamProbality = detect_spam((sms))
+        is_spam = spamProbality > 1
         
 if is_spam:
-    st.error("The sms is a spam")
+    st.error(f"The sms is a spam, probability : {spamProbality}")
 elif sms:
-    st.success("The sms is not a spam")
+    st.success(f"The sms is not a spam, probability : {spamProbality}")
 
