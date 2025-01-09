@@ -17,6 +17,9 @@ trainDF = pd.read_csv(
     f"{args.TFile}", delimiter="\t", header=None, names=["spam", "text"]
 )
 
+#Handle les cas ou l'étiquette n'a pas la meme casse
+trainDF["spam"]=trainDF["spam"].apply(str.lower)
+
 #Creer un tableau des mots et de leur frequence
 trainDFSpam = trainDF[trainDF["spam"]=="spam"]
 trainDFSpam["text"]=trainDFSpam["text"].str.lower()
