@@ -1,11 +1,13 @@
 import pandas as pd
 
 class TestBinaireResult:
-    def __init__(self,EvaluatedDF:pd.DataFrame):
-        self.FP = len(EvaluatedDF[(EvaluatedDF["Finalresult"]=="spam")&(EvaluatedDF["spam"]=="ham")].index)
-        self.FN = len(EvaluatedDF[(EvaluatedDF["Finalresult"]=="ham")&(EvaluatedDF["spam"]=="spam")].index)
-        self.VP = len(EvaluatedDF[(EvaluatedDF["Finalresult"]=="ham")&(EvaluatedDF["spam"]=="ham")].index)
-        self.VN = len(EvaluatedDF[(EvaluatedDF["Finalresult"]=="spam")&(EvaluatedDF["spam"]=="spam")].index)
+    def __init__(self,EvaluatedDF:pd.DataFrame,dataName:str):
+        self.dataName = dataName
+
+        self.FP = len(EvaluatedDF[(EvaluatedDF["Result"]=="spam")&(EvaluatedDF["spam"]=="ham")].index)
+        self.FN = len(EvaluatedDF[(EvaluatedDF["Result"]=="ham")&(EvaluatedDF["spam"]=="spam")].index)
+        self.VP = len(EvaluatedDF[(EvaluatedDF["Result"]=="ham")&(EvaluatedDF["spam"]=="ham")].index)
+        self.VN = len(EvaluatedDF[(EvaluatedDF["Result"]=="spam")&(EvaluatedDF["spam"]=="spam")].index)
 
         self.exactitude = (self.VN+self.VP)/(self.VN+self.FN+self.FP+self.VP)
         self.rappel = self.VP /(self.VP+self.FN)
@@ -16,8 +18,8 @@ class TestBinaireResult:
         self.F1ScoreN = (2 * self.precisionN * self.rappelN) / (self.precisionN + self.rappelN)
 
     def printValues(self):
-        print(f"Exactitude : {self.exactitude}")
-        print(f"Rappel : {self.rappel}")
+        print(f"Exactitude : {round(self.exactitude,2)}")
+        print(f"Rappel : {self.rappel:.2f}")
         print(f"Rappel négative: {self.rappelN}")
         print(f"Precision : {self.precision}")
         print(f"Précision négative: {self.precisionN}")

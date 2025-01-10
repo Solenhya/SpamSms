@@ -30,5 +30,6 @@ class BayesienModel:
     def Evaluate(self,brutDataSet:pd.DataFrame):
         brutDataSet[brutDataSet.columns[0]].apply(str.lower)
         brutDataSet["Result"]=brutDataSet[brutDataSet.columns[1]].apply(self.Predict)
-        brutDataSet["Result"]=brutDataSet["Result"].apply(str.lo)
+        brutDataSet["Result"]=brutDataSet["Result"].apply(str.lower)
+        return brutDataSet
 
