@@ -8,7 +8,7 @@ from sklearn.naive_bayes import MultinomialNB
 
 class NaiveBayesModel():
     
-    def __init__(self, dataset):
+    def __init__(self, dataset, random=None):
         """Créer un modèle de classification
 
         Args:
@@ -19,6 +19,7 @@ class NaiveBayesModel():
         self.vectorizer = CountVectorizer(stop_words='english')
         self.X = self.vectorizer.fit_transform(self.dataset['text'])
         self.y = self.dataset['spam']
+        self.random_state = 42 if random else None
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=0.2, random_state=42)
         self.model = MultinomialNB()
         self.model.fit(self.X_train, self.y_train)
