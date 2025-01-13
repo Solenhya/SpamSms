@@ -106,6 +106,7 @@ class BaseFeaturesModel():
         df['has_currency_symbol'] = df['text'].apply(lambda x: 1 if re.search(r'[\$\€\£]', x) else 0)
         df["has_special_characters"] = df['text'].apply(lambda x: 1 if re.search(r'[!@#$%^&*(),.?":{}|<>]', x) else 0)
         df['message_length'] = df['text'].apply(len)
+        df['word_count'] = df['text'].apply(lambda x: len(x.split()))
         df["uppercase_proportion"] = df['text'].apply(lambda x: sum(1 for c in x if c.isupper()) / len(x) if len(x) > 0 else 0)
         df["has_url"] = df['text'].apply(lambda x: 1 if re.search(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', x) else 0)
         df["non_alpha_charaters_proportion"] = df['text'].apply(lambda x: sum(1 for c in x if not c.isalpha()) / len(x) if len(x) > 0 else 0)
