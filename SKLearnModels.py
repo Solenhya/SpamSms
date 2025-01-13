@@ -22,7 +22,7 @@ class NaiveBayesModel():
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=0.2, random_state=42)
         self.model = MultinomialNB()
         self.model.fit(self.X_train, self.y_train)
-    
+ 
     def Predict(self, test_data=None):
         """Applique le modèle sur des données
 
@@ -38,4 +38,5 @@ class NaiveBayesModel():
             test_data = self.vectorizer.transform(test_data)
         predictions = self.model.predict(test_data)
         return predictions
+
 
