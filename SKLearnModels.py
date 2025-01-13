@@ -124,6 +124,7 @@ class BaseFeaturesModel():
             test_data = self.X_test
         else:
             test_data = self.Vectorize(pd.DataFrame(test_data, columns=['text']))
+            test_data = test_data.drop(columns=['text'])
         predictions = self.model.predict(test_data)
         return predictions
 
@@ -134,6 +135,18 @@ class NaiveBayesModel(BaseCountModel):
     def __init__(self, dataset, random=None):
         """Créer un modèle de classification
 
+        Args:
+            dataset (Dataframe): Dataframe d'entrainement du modèle
+        """
+        super().__init__(dataset, random)
+        self.model = MultinomialNB()
+        self.model.fit(self.X_train, self.y_train)
+        
+        
+class NaiveBayesFeaturesModel(BaseFeaturesModel):
+    def __init__(self, dataset, random=None):
+        """Créer un modèle de classification
+        
         Args:
             dataset (Dataframe): Dataframe d'entrainement du modèle
         """
@@ -152,7 +165,28 @@ class SCVModel(BaseCountModel):
         self.model = LinearSVC()
         self.model.fit(X=self.X_train, y=self.y_train)
 
+class SCVFeaturesModel(BaseFeaturesModel):
+    def __init__(self, dataset, random=None):
+        """Créer un modèle de classification
+
+        Args:
+            dataset (Dataframe): Dataframe d'entrainement du modèle
+        """
+        super().__init__(dataset, random)
+        self.model = LinearSVC()
+        self.model.fit(X=self.X_train, y=self.y_train)
+
 class RandomForestModel(BaseTFIDModel):
+    def __init__(self, dataset, random=None):
+        """Créer un modèle de classification
+        Args:
+                dataset (Dataframe): Dataframe d'entrainement du modèle
+        """
+        super().__init__(dataset, random)
+        self.model = RandomForestClassifier(max_depth=20)
+        self.model.fit(X=self.X_train, y=self.y_train)
+
+class RandomForestFeaturesModel(BaseFeaturesModel):
     def __init__(self, dataset, random=None):
         """Créer un modèle de classification
         Args:
@@ -164,6 +198,16 @@ class RandomForestModel(BaseTFIDModel):
 
 
 class LogisticRegressionModel(BaseCountModel):
+    def __init__(self, dataset, random=None):
+        """Créer un modèle de classification
+        Args:
+                dataset (Dataframe): Dataframe d'entrainement du modèle
+        """
+        super().__init__(dataset, random)
+        self.model = LogisticRegression()
+        self.model.fit(X=self.X_train, y=self.y_train)
+        
+class LogisticRegressionFeaturesModel(BaseFeaturesModel):
     def __init__(self, dataset, random=None):
         """Créer un modèle de classification
         Args:
