@@ -1,4 +1,4 @@
-from SKLeanModels import NaiveBayesModel
+from SpamSms.SKLearnModels import NaiveBayesModel
 import pandas as pd
 
 df = pd.read_csv("BD1.txt", sep="\t", names=["spam", "text"])
