@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 class TestBinaireResult:
     def __init__(self,EvaluatedDF:pd.DataFrame,dataName:str):
         self.dataName = dataName
@@ -19,9 +20,9 @@ class TestBinaireResult:
 
     def printValues(self):
         print(f"Exactitude : {round(self.exactitude,2)}")
-        print(f"Rappel : {self.rappel:.2f}")
-        print(f"Rappel négative: {self.rappelN}")
-        print(f"Precision : {self.precision}")
-        print(f"Précision négative: {self.precisionN}")
-        print(f"F1-Score : {self.F1Score}")
-        print(f"F1-Score Négatif: {self.F1ScoreN}")
+        print(f"Rappel : {round(self.rappel,2)}")
+        print(f"Rappel négative: {round(self.rappelN,2)}")
+        print(f"Precision : {round(self.precision,2)}")
+        print(f"Précision négative: {round(self.precisionN,2)}")
+        print(f"F1-Score : {round(self.F1Score,2)}")
+        print(f"F1-Score Négatif: {round(self.F1ScoreN,2)}")
