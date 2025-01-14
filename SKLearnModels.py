@@ -1,4 +1,5 @@
 from re import M
+from numpy import test
 import pandas as pd
 import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -8,6 +9,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.svm import LinearSVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import MinMaxScaler
 import re
 
 
@@ -91,6 +93,7 @@ class BaseFeaturesModel():
             list: Vecteurs de données
         """
         df = pd.DataFrame(df, columns=['text'])
+        self.scaler = MinMaxScaler()
         df['has_phone_number'] = df['text'].apply(lambda x: 1 if re.search(r'\b\d{10,}\b', x) else 0)
         df['has_currency_symbol'] = df['text'].apply(lambda x: 1 if re.search(r'[\$\€\£]', x) else 0)
         df["has_special_characters"] = df['text'].apply(lambda x: 1 if re.search(r'[!@#$%^&*(),.?":{}|<>]', x) else 0)
@@ -100,6 +103,7 @@ class BaseFeaturesModel():
         df["uppercase_proportion"] = df['text'].apply(lambda x: sum(1 for c in x if c.isupper()) / len(x) if len(x) > 0 else 0)
         df["has_url"] = df['text'].apply(lambda x: 1 if re.search(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', x) else 0)
         df["non_alpha_charaters_proportion"] = df['text'].apply(lambda x: sum(1 for c in x if not c.isalpha()) / len(x) if len(x) > 0 else 0)
+        df[["message_length"]] = self.scaler.fit_transform(df[["message_length"]])
         return df
         
     def Predict(self, test_data):
