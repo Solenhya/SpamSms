@@ -15,7 +15,6 @@ class SpamAnalysis:
         self.dataSet["uppercaseProportion"]=self.UppercaseCollumns(self.dataSet)
         self.dataSet["email"]=self.EmailCollumns(self.dataSet)
         self.dataSet["specialCharacters"]=self.SpecialCharactersCollumns(self.dataSet)
-        self.dataSet["figureNumber"]=self.FigureCollumns(self.dataSet)
 
     def WordCountCollumns(self,dataSet:pd.DataFrame):
         retour=dataSet["text"].str.split()
@@ -48,10 +47,6 @@ class SpamAnalysis:
     def SpecialCharactersCollumns(self, dataSet:pd.DataFrame):
         retour = dataSet["text"]
         retour = retour.apply(lambda x:len(re.findall(r'[!@#$%^&*(),.?":{}|<>]',x)))
-        return retour
-    def FigureCollumns(self, dataSet:pd.DataFrame):
-        retour = dataSet["text"]
-        retour = retour.apply(lambda x:len(re.findall(r'\d',x)))
         return retour
 
     def PieOnFeature(self,feature,title=""):
@@ -95,4 +90,3 @@ class SpamAnalysis:
         self.BoiteMoustache("uppercaseProportion", title="Proportion de  majuscule", xlabel="Proportion", ylabel="Ham/Spam")
         self.PieOnFeature("email", title= "Présence d'email dans la phrase")
         self.BoiteMoustache("specialCharacters", title="Nombre de caractères spéciaux par phrase", xlabel="Nombre", ylabel="Ham/Spam")
-        self.BoiteMoustache("figureNumber", title="Nombre de chiffres par phrase", xlabel="Nombre", ylabel="Ham/Spam")
