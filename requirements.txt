@@ -2,3 +2,5 @@ pandas
 matplotlib
 scikit_learn
 plotly
+streamlit
+joblib
