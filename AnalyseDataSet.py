@@ -12,6 +12,10 @@ class SpamAnalysis:
         self.dataSet["moneyChar"]=self.MoneyCharacCollumns(self.dataSet)
         self.dataSet["digitCount"]=self.NumbersCollumns(self.dataSet)
         self.dataSet["link"]=self.LinksCollumns(self.dataSet)
+        self.dataSet["uppercaseProportion"]=self.UppercaseCollumns(self.dataSet)
+        self.dataSet["email"]=self.EmailCollumns(self.dataSet)
+        self.dataSet["specialCharacters"]=self.SpecialCharactersCollumns(self.dataSet)
+        self.dataSet["figureNumber"]=self.FigureCollumns(self.dataSet)
 
     def WordCountCollumns(self,dataSet:pd.DataFrame):
         retour=dataSet["text"].str.split()
@@ -33,6 +37,22 @@ class SpamAnalysis:
         retour = dataSet["text"]
         retour = retour.apply(lambda x:len(re.findall(r'\b(http|www)',x)))
         return retour
+    def UppercaseCollumns(self, dataSet:pd.DataFrame):
+        retour= dataSet["text"]
+        retour= retour.apply(lambda x: sum(1 for c in x if c.isupper()) / len(x) if len(x) > 0 else 0)
+        return retour
+    def EmailCollumns(self, dataSet:pd.DataFrame):
+        retour= dataSet["text"]
+        retour= retour.apply(lambda x: len(re.findall(r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}', x)) > 0)
+        return retour
+    def SpecialCharactersCollumns(self, dataSet:pd.DataFrame):
+        retour = dataSet["text"]
+        retour = retour.apply(lambda x:len(re.findall(r'[!@#$%^&*(),.?":{}|<>]',x)))
+        return retour
+    def FigureCollumns(self, dataSet:pd.DataFrame):
+        retour = dataSet["text"]
+        retour = retour.apply(lambda x:len(re.findall(r'\d',x)))
+        return retour
 
     def PieOnFeature(self,feature,title=""):
         data=self.dataSet[["spam",feature]]
@@ -40,9 +60,9 @@ class SpamAnalysis:
         dataHam = data[data["spam"]=="ham"].groupby(feature).count()
         fig,axes = plt.subplots(1, 2, figsize=(10, 5))
         axes[0].pie(dataSpam["spam"], labels=dataSpam.index,startangle=90,autopct=lambda x:f'{x:.1f}%')
-        axes[0].set_title('ham')
+        axes[0].set_title('spam')
         axes[1].pie(dataHam["spam"],labels=dataHam.index,startangle = 90,autopct=lambda x:f'{x:.1f}%')
-        axes[1].set_title('spam')
+        axes[1].set_title('ham')
         fig.suptitle(title)
         plt.tight_layout()
         plt.show()
@@ -72,3 +92,7 @@ class SpamAnalysis:
         self.PieOnFeature("moneyChar",title="Nombre de symbole monetaire dans ham ou spam")
         self.BoiteMoustache("digitCount",title="Nombre de chiffre par phrase",xlabel="Nombres",ylabel="Ham/Spam")
         self.PieOnFeature("link",title="Nombre de liens dans la phrase")
+        self.BoiteMoustache("uppercaseProportion", title="Proportion de  majuscule", xlabel="Proportion", ylabel="Ham/Spam")
+        self.PieOnFeature("email", title= "Présence d'email dans la phrase")
+        self.BoiteMoustache("specialCharacters", title="Nombre de caractères spéciaux par phrase", xlabel="Nombre", ylabel="Ham/Spam")
+        self.BoiteMoustache("figureNumber", title="Nombre de chiffres par phrase", xlabel="Nombre", ylabel="Ham/Spam")
