@@ -14,24 +14,6 @@ from itertools import combinations
 import time
 from sklearn.base import clone
 
-"""
-
-Usage Exemples:
-
-To create a model with the pipeline and all the features:
-import EvaluateModelsFeatures as Eval
-model = Eval.GenerateModel(model=RandomForestClassifier(),X_train=X1_train, y_train=y1_train, features_names=Eval.get_dictionnaire("all"))
-print(classification_report(y1_test,model.predict(X1_test)))
-print(model.predict(pd.DataFrame(['You won 200 billion dollars, call now!', 'Hi, how are you?'], columns=["text"])))
-
-To obtain the score of a model for each features combinations:
-from pandas import DataFrame
-from sklearn.naive_bayes import MultinomialNB
-model = MultinomialNB()
-df_naive_bayes: DataFrame = Eval.calculate_precisions_for_all_combinations(X1_train,  y1_train, X1_test, y1_test, model=model, scaler=MinMaxScaler())
-
-"""
-
 
 class DataExtraction(BaseEstimator, TransformerMixin):
     
@@ -107,6 +89,13 @@ def GenerateModel(features_names, model, X_train, y_train,vectorizer=TfidfVector
 
     Returns:
         Pipeline: Trained pipeline that combines feature extraction, text vectorization, and the model
+        
+    Usage exemple:
+        >>> import EvaluateModelsFeatures as Eval
+        >>> model = Eval.GenerateModel(model=RandomForestClassifier(),X_train=X1_train, y_train=y1_train, features_names=Eval.get_dictionnaire("all"))
+        >>> print(classification_report(y1_test,model.predict(X1_test)))
+        >>> print(model.predict(pd.DataFrame(['You won 200 billion dollars, call now!', 'Hi, how are you?'], columns=["text"])))
+
     """
     target = y_train
     data = X_train
@@ -155,6 +144,12 @@ def calculate_precisions_for_all_combinations(X_train, y_train, X_test, y_test, 
         Returns:
             pd.DataFrame: DataFrame containing combination details, accuracy metrics, training time,
                          and recall scores for both ham and spam classes
+                         
+        Usage exemple:
+            >>> from pandas import DataFrame 
+            >>> from sklearn.naive_bayes import MultinomialNB 
+            >>> model = MultinomialNB() 
+            >>> df_naive_bayes: DataFrame = Eval.calculate_precisions_for_all_combinations(X1_train,  y1_train, X1_test, y1_test, model=model, scaler=MinMaxScaler()) 
         """
     
     results_df = pd.DataFrame(columns=['combination', 'accuracy', 'time'])
