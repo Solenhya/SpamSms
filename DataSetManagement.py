@@ -1,6 +1,9 @@
 from sklearn.model_selection import train_test_split
 import pandas as pd
 
+class CurrentDataSets:
+    dataSet = {"first":"BD1.txt","nigerian":"DataSmsSpamNH.csv","telegram":"telegram_spam_dataset.csv"}
+
 class BDSpam:
     def __init__(self,randomState,name,BDpath):
         self.dataSet = pd.read_csv(BDpath,sep="\t",header=None,names=["spam","text"])
