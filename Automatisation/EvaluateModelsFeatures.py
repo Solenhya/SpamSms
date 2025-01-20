@@ -204,3 +204,27 @@ def calculatePrecisionOnBattery(X_train, y_train, testBattery, model=LinearSVC()
     results_df = pd.concat(lineToConct,ignore_index=True)
 
     return results_df
+
+def calculatePrecisionOnBattery(X_train, y_train, testBattery, model=LinearSVC(), scaler=StandardScaler()):
+    combinations_dict = get_dictionnaire("combination")
+    lineToConct = []
+    for combination, dict in combinations_dict.items():
+        start_time = time.time()
+        # Create a fresh instance of the model for each iteration
+        model_instance = clone(model)
+        pipeline = GenerateModel(model=model_instance, X_train=X_train, y_train=y_train, features_names=dict, scaler=scaler)
+        end_time = time.time()
+        training_time = end_time - start_time
+        line = pd.DataFrame(columns=["combination"])
+        line["combination"]=[list(dict.keys())]
+        line["time"]=training_time
+        for key , value in testBattery.items():
+            X_test,y_test=value
+            repport = classification_report(y_test,pipeline.predict(X_test),output_dict=True)
+            line["dictionnary"] = [repport]
+            new_coll = line["dictionnary"].apply(extract_metrics,generalName=f"{key}")
+            line = pd.concat([line, new_coll], axis=1)
+        lineToConct.append(line)
+    results_df = pd.concat(lineToConct,ignore_index=True)
+
+    return results_df
