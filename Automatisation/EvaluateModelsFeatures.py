@@ -109,7 +109,7 @@ def GenerateModel(features_names, model, X_train, y_train,vectorizer=TfidfVector
     modelPipe.fit(data,target)
     return modelPipe
 
-def extract_metrics(row):
+def extract_metrics(row,generalName = ""):
     """
         Extract specific metrics from a classification report dictionary.
         
@@ -122,10 +122,16 @@ def extract_metrics(row):
     
     metrics = {}
     for class_name, values in row.items():
-        if not isinstance(values, float):
-            for metric, value in values.items():
-                if class_name in ['ham', 'spam']:
-                    metrics[f'{metric}_{class_name}'] = value
+        if isinstance(values, float):
+            continue
+        for metric, value in values.items():
+            if class_name not in ['ham', 'spam']:
+                continue
+            if generalName == "":
+                metrics[f'{metric}_{class_name}'] = value
+            else:
+                metrics[f'{metric}_{class_name} for {generalName}'] = value
+
     return pd.Series(metrics)
 
 
@@ -174,3 +180,27 @@ def calculate_precisions_for_all_combinations(X_train, y_train, X_test, y_test, 
     new_columns = results_df["accuracy"].apply(extract_metrics)
     df_precisions = pd.concat([results_df, new_columns], axis=1)
     return df_precisions[["combination", "accuracy", "time", "recall_ham", "recall_spam"]]
+
+def calculatePrecisionOnBattery(X_train, y_train, testBattery, model=LinearSVC(), scaler=StandardScaler()):
+    combinations_dict = get_dictionnaire("combination")
+    lineToConct = []
+    for combination, dict in combinations_dict.items():
+        start_time = time.time()
+        # Create a fresh instance of the model for each iteration
+        model_instance = clone(model)
+        pipeline = GenerateModel(model=model_instance, X_train=X_train, y_train=y_train, features_names=dict, scaler=scaler)
+        end_time = time.time()
+        training_time = end_time - start_time
+        line = pd.DataFrame(columns=["combination"])
+        line["combination"]=[list(dict.keys())]
+        line["time"]=training_time
+        for key , value in testBattery.items():
+            X_test,y_test=value
+            repport = classification_report(y_test,pipeline.predict(X_test),output_dict=True)
+            line["dictionnary"] = [repport]
+            new_coll = line["dictionnary"].apply(extract_metrics,generalName=f"{key}")
+            line = pd.concat([line, new_coll], axis=1)
+        lineToConct.append(line)
+    results_df = pd.concat(lineToConct,ignore_index=True)
+
+    return results_df

@@ -8,31 +8,30 @@ class BDSpam:
     def __init__(self,randomState,name,BDpath):
         self.dataSet = pd.read_csv(BDpath,sep="\t",header=None,names=["spam","text"])
         self.name =name
-        self.dataSet[""]
         X = self.dataSet["text"]
         y = self.dataSet["spam"].apply(str.lower)
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X,y , test_size=0.2, random_state=randomState)
 
     def GetAll(self):
-        return self.X_train,self.X_test,self.y_train,self.y_test
+        return pd.DataFrame(self.X_train),pd.DataFrame(self.X_test),pd.DataFrame(self.y_train),pd.DataFrame(self.y_test)
 
     def GetTest(self):
-        return self.X_test,self.y_test
+        return pd.DataFrame(self.X_test),pd.DataFrame(self.y_test)
     
     def GetTrain(self):
-        return self.X_train,self.y_train
+        return pd.DataFrame(self.X_train),pd.DataFrame(self.y_train)
     
 class DataSetManage():
     def __init__(self,dataSet,randomState):
         self.BD = {}
         self.dataSetSelect = dataSet
         self.randomState = randomState
-        for name,path in self.dataSetSelect.item:
-            self.BD[name]= BDSpam(randomState=self.randomState,name=name,BDpath=path)
+        for name,path in self.dataSetSelect.items():
+            self.BD[name] = BDSpam(randomState=self.randomState,name=name,BDpath=path)
 
     def GetTrain(self,name):
-        if name in self.BD.keys():
-            return self.BD[name]
+        if name in self.BD:
+            return self.BD[name].GetTrain()
     
     def GetCombinedTrain(self,keys):
         TrainConcat = []
@@ -48,8 +47,8 @@ class DataSetManage():
         TargetConcat = pd.concat(TargetConcat,ignore_index=True)
         return TrainConcat,TargetConcat
 
-    def GetTestDF(self):
-        retour = []
-        for bd in self.BD.values():
-            retour.append(bd.GetTest())
+    def GetAllTest(self):
+        retour = {}
+        for name,bd in self.BD.items():
+            retour[name]=bd.GetTest()
         return retour
