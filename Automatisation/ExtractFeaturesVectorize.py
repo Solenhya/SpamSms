@@ -48,5 +48,5 @@ filepath=""
 if args.OFile:
     filepath =args.OFile+'.joblib'   
 else:
-    filepath="VectorizedDataset.joblib"
+    filepath="./Models/VectorizedDataset.joblib"
 joblib.dump((x,df["spam"]),filepath)

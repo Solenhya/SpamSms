@@ -1,5 +1,6 @@
 import pandas as pd
 import joblib
+
 class BayesienModel:
     #Initialise le model depuis le joblib serialiser
     def __init__(self,modelPath):

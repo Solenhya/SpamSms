@@ -2,7 +2,7 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 
 class CurrentDataSets:
-    dataSet = {"first":"BD1.txt","nigerian":"DataSmsSpamNH.csv","telegram":"telegram_spam_dataset.csv"}
+    dataSet = {"first":"./DataSetBrut/BD1.txt","nigerian":"./DataSetBrut/DataSmsSpamNH.csv","telegram":"./DataSetBrut/telegram_spam_dataset.csv"}
 
 class BDSpam:
     def __init__(self,randomState,name,BDpath):

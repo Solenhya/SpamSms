@@ -44,5 +44,5 @@ filepath=""
 if args.OFile:
     filepath =args.OFile+'.joblib'   
 else:
-    filepath="BayesienModel.joblib"
+    filepath="./Models/BayesienModel.joblib"
 joblib.dump((modelFrame,spamProbality),filepath)
