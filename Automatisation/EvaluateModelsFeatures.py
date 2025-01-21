@@ -52,13 +52,13 @@ def get_dictionnaire(string_list):
     if string_list == "all":
         return features
     elif string_list == "combination":
-        # Générer toutes les combinaisons possibles
+        # Generate all possible combinations
         all_combinations = []
         for r in range(1, len(features) + 1):
             combinations_r = list(combinations(features.keys(), r))
             all_combinations.extend(combinations_r)
 
-        # Créer un dictionnaire de toutes les combinaisons
+        # Create a dictionary of all combinations
         combinations_dict = {}
         for i, combo in enumerate(all_combinations, 1):
             combinations_dict[f"combination_{i}"] = {k: features[k] for k in combo}
@@ -182,6 +182,27 @@ def calculate_precisions_for_all_combinations(X_train, y_train, X_test, y_test, 
     return df_precisions[["combination", "accuracy", "time", "recall_ham", "recall_spam"]]
 
 def calculatePrecisionOnBattery(X_train, y_train, testBattery, model=LinearSVC(), scaler=StandardScaler()):
+    """
+        Calculate precision metrics for all feature combinations using a specified model on multiple test sets.
+    
+        Args:
+            X_train (pd.DataFrame): Training data containing text samples
+            y_train (pd.Series): Training labels
+            testBattery (dict): Dictionary containing multiple test sets with format {test_name: (X_test, y_test)}
+            model: The machine learning model to use (default: LinearSVC)
+            scaler: Feature scaler (default: StandardScaler)
+    
+        Returns:
+            pd.DataFrame: DataFrame containing combination details, training time, and recall scores for both ham and spam classes for each test set
+    
+        Usage example:
+            >>> from pandas import DataFrame
+            >>> from sklearn.naive_bayes import MultinomialNB
+            >>> test_sets = {"test1": (X1_test, y1_test), "test2": (X2_test, y2_test)}
+            >>> model = MultinomialNB()
+            >>> df_results = calculatePrecisionOnBattery(X_train, y_train, test_sets, model=model, scaler=MinMaxScaler())
+        """
+    
     combinations_dict = get_dictionnaire("combination")
     lineToConct = []
     for combination, dict in combinations_dict.items():
@@ -206,6 +227,27 @@ def calculatePrecisionOnBattery(X_train, y_train, testBattery, model=LinearSVC()
     return results_df
 
 def calculatePrecisionOnBattery(X_train, y_train, testBattery, model=LinearSVC(), scaler=StandardScaler()):
+    """
+        Calculate precision metrics for all feature combinations using a specified model on multiple test sets.
+    
+        Args:
+            X_train (pd.DataFrame): Training data containing text samples
+            y_train (pd.Series): Training labels
+            testBattery (dict): Dictionary containing multiple test sets with format {test_name: (X_test, y_test)}
+            model: The machine learning model to use (default: LinearSVC)
+            scaler: Feature scaler (default: StandardScaler)
+    
+        Returns:
+            pd.DataFrame: DataFrame containing combination details, training time, and recall scores for both ham and spam classes for each test set    
+            
+        Usage example:
+            >>> from pandas import DataFrame
+            >>> from sklearn.naive_bayes import MultinomialNB
+            >>> test_sets = {"test1": (X1_test, y1_test), "test2": (X2_test, y2_test)}
+            >>> model = MultinomialNB()
+            >>> df_results = calculatePrecisionOnBattery(X_train, y_train, test_sets, model=model, scaler=MinMaxScaler())
+        """
+    
     combinations_dict = get_dictionnaire("combination")
     lineToConct = []
     for combination, dict in combinations_dict.items():

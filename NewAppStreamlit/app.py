@@ -17,6 +17,7 @@ st.set_page_config(
     }
 )
 
+# Model training and caching of the model
 @st.cache_resource
 def TrainModel():
     dataSet = {

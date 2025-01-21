@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 
+# Load the trained model by joblib
 loaded_df, spamProbality = joblib.load('./BayesienModel.joblib')
 
 def TestPhraseList(phraseList,spamProba=1):
